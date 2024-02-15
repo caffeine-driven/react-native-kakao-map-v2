@@ -1,4 +1,4 @@
-package com.kakaomapv2
+package net.devcaffeine.kakaomapv2
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule
@@ -12,6 +12,6 @@ class KakaoMapV2Package : ReactPackage {
   }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf(KakaoMapV2ViewManager())
+    return listOf(KakaoMapV2ViewManager(reactContext))
   }
 }

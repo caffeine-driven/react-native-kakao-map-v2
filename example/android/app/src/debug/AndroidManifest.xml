@@ -5,5 +5,8 @@
     <application
         android:usesCleartextTraffic="true"
         tools:targetApi="28"
-        tools:ignore="GoogleAppIndexingWarning"/>
+      tools:ignore="GoogleAppIndexingWarning">
+      <meta-data
+        android:name="com.kakao.vectormap.APP_KEY" android:value="8aa8fdccefb37c43577edcf3c5e5c7ae"/>
+    </application>
 </manifest>

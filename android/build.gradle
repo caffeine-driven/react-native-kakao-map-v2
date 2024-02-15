@@ -44,7 +44,7 @@ def supportsNamespace() {
 
 android {
   if (supportsNamespace()) {
-    namespace "com.kakaomapv2"
+    namespace "net.devcaffeine.kakaomapv2"
 
     sourceSets {
       main {
@@ -76,10 +76,14 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
 }
+rootProject.allprojects {
+  it.getRepositories().maven({ url 'https://devrepo.kakao.com/nexus/repository/kakaomap-releases/' })
+}
 
 repositories {
   mavenCentral()
   google()
+  maven { url 'https://devrepo.kakao.com/nexus/repository/kakaomap-releases/' }
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -90,5 +94,5 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation 'com.kakao.maps.open:android:2.6.3'
 }
-

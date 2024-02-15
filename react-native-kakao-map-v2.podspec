@@ -21,6 +21,7 @@ Pod::Spec.new do |s|
   if respond_to?(:install_modules_dependencies, true)
     install_modules_dependencies(s)
   else
+  s.dependency 'KakaoMapsSDK', '2.0.0'
   s.dependency "React-Core"
 
   # Don't install the dependencies when we run `pod install` in the old architecture.
@@ -38,5 +39,5 @@ Pod::Spec.new do |s|
     s.dependency "RCTTypeSafety"
     s.dependency "ReactCommon/turbomodule/core"
    end
-  end    
+  end
 end

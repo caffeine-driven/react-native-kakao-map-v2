@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "react-native-kakao-map-v2": ["./src/index"]
+      "react-native-kakao-map-v2": ["./src/index"],
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
