@@ -5,13 +5,13 @@
 //  Created by caffeine.driven on 2/19/24.
 //
 #import <React/RCTConvert.h>
-#import "react_native_kakao_map_v2-Swift.h"
+#import "camera/CenterPosition.h"
+#import "common/Coordinate.h"
 
-@class CenterPosition;
-@class LodLabel;
-@class LabelStyle;
-@class AnchorPoints;
-@class TextStyleProp;
+#import "label/lodlabel/LodLabel.h"
+#import "label/location/CurrentLocationMarkerOption.h"
+#import "label/balloon/BalloonLabel.h"
+#import "line/RouteLine.h"
 
 @interface RCTConvert (KakaoMapV2ViewManager)
 

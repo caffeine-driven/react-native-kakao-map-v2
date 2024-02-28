@@ -58,7 +58,7 @@ class LodLabelManager {
   func convertLabelStyle(labelStyle: LabelStyle)->PerLevelPoiStyle {
     let iconStyle = PoiIconStyle(symbol: UIImage(named: labelStyle.icon), anchorPoint: CGPoint(x: labelStyle.anchorPoint.x, y: labelStyle.anchorPoint.y))
     let textStyle = self.convertTextStyle(textStyleProps: labelStyle.textStyles)
-    return PerLevelPoiStyle(iconStyle: iconStyle, textStyle: textStyle, padding: 0.0, level: labelStyle.zoomLevel)
+    return PerLevelPoiStyle(iconStyle: iconStyle, textStyle: textStyle, padding: 0.0, level: Int(labelStyle.zoomLevel))
   }
   
   func convertTextStyle(textStyleProps: Array<TextStyleProp>) ->PoiTextStyle {

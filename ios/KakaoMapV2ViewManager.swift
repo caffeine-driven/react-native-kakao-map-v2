@@ -28,12 +28,12 @@ class KakaoMapV2View : UIView, MapControllerDelegate, KakaoMapEventDelegate {
   lazy var mapView: KMViewContainer? = nil
   
   
-  @objc var centerPosition: CenterPosition = CenterPosition(latitude: 33.56535720825195, longitude:  126.55416870117188, zoomLevel: 7) {
+  @objc var centerPosition: CenterPosition = CenterPosition() {
     didSet{
       if (kakaoMap != nil){
         self.cameraManager.latitude = centerPosition.latitude
         self.cameraManager.longitude = centerPosition.longitude
-        self.cameraManager.zoomLevel = centerPosition.zoomLevel
+        self.cameraManager.zoomLevel = Int(centerPosition.zoomLevel)
         self.cameraManager.updateCameraCenter(kakaoMap: kakaoMap!)
       }
     }
@@ -171,7 +171,7 @@ class KakaoMapV2View : UIView, MapControllerDelegate, KakaoMapEventDelegate {
   func addViews() {
     let defaultPosition: MapPoint = MapPoint(longitude:  self.centerPosition.longitude, latitude: self.centerPosition.latitude)
     
-    let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview", viewInfoName: "map", defaultPosition: defaultPosition, defaultLevel: self.centerPosition.zoomLevel)
+    let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview", viewInfoName: "map", defaultPosition: defaultPosition, defaultLevel: Int(self.centerPosition.zoomLevel))
     
     if controller?.addView(mapviewInfo) == Result.OK {
       kakaoMap = controller?.getView("mapview") as? KakaoMap

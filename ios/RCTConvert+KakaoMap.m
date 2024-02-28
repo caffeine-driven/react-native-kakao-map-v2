@@ -20,7 +20,13 @@
   double longitude = lng != nil ? lng.doubleValue : 0.0;
   int zoomLevel = zoomLv != nil ? zoomLv.intValue : 17;
   
-  return [[CenterPosition alloc] initWithLatitude:latitude longitude:longitude zoomLevel:zoomLevel];
+  CenterPosition* centerPosition = [[CenterPosition alloc] init];
+  
+  [centerPosition setLatitude:latitude];
+  [centerPosition setLongitude:longitude];
+  [centerPosition setZoomLevel:zoomLevel];
+  
+  return centerPosition;
 }
 +(CurrentLocationMarkerOption*)CurrentLocationMarkerOption:(id)json{
   if (json == nil){
@@ -36,7 +42,11 @@
   NSNumber* offsetX = [json objectForKey:@"offsetX"];
   NSNumber* offsetY = [json objectForKey:@"offsetY"];
   
-  CurrentLocationMarkerOption* option = [[CurrentLocationMarkerOption alloc] initWithLatitude:lat.doubleValue longitude:lng.doubleValue markerImage:markerImage];
+  CurrentLocationMarkerOption* option = [[CurrentLocationMarkerOption alloc] init];
+
+  option.latitude = lat.doubleValue;
+  option.longitude = lng.doubleValue;
+  option.markerImage = markerImage;
   
   option.angle = angle;
   option.rotateMap = rotateMap;
@@ -59,7 +69,16 @@
     NSNumber* lat = labelData[@"latitude"];
     NSNumber* lng = labelData[@"longitude"];
     
-    BalloonLabel* label = [[BalloonLabel alloc] initWithId:idStr title:title activeIcon:activeIcon inactiveIcon:inactiveIcon latitude:lat longitude:lng];
+    BalloonLabel* label = [[BalloonLabel alloc] init];
+    
+    [label setId:idStr];
+    label.title=title;
+    label.activeIcon=activeIcon;
+    label.inactiveIcon=inactiveIcon;
+    label.latitude=lat;
+    label.longitude=lng;
+    
+    
     [labels addObject:label];
   }
   return labels;
@@ -83,13 +102,15 @@
     NSNumber* lng = labelData[@"longitude"];
     NSNumber* click = labelData[@"clickable"];
     NSString* idStr = labelData[@"id"];
-    LodLabel* label = [[LodLabel alloc] initWithId:idStr
-                                            styles:styles
-                                         clickable:click.boolValue
-                                             texts:textsData
-                                          latitude:lat.doubleValue
-                                         longitude:lng.doubleValue
-    ];
+    LodLabel* label = [[LodLabel alloc] init];
+    
+    [label setId:idStr];
+    label.styles = styles;
+    label.clickable = click.boolValue;
+    label.texts = textsData;
+    label.latitude = lat.doubleValue;
+    label.longitude = lng.doubleValue;
+    
     [lodLabels addObject:label];
   }
   
@@ -104,7 +125,9 @@
   NSNumber* x = anchorPointDict[@"x"];
   NSNumber* y = anchorPointDict[@"y"];
   
-  AnchorPoints* anchorPoint = [[AnchorPoints alloc] initWithX:x.doubleValue y:y.doubleValue];
+  AnchorPoints* anchorPoint = [[AnchorPoints alloc] init];
+  anchorPoint.x=x.doubleValue;
+  anchorPoint.y=y.doubleValue;
   
   NSMutableArray<TextStyleProp*>* textStyles = [[NSMutableArray alloc] init];
   if (textStylesArray != nil){
@@ -113,7 +136,14 @@
     }
   }
   
-  return [[LabelStyle alloc] initWithIcon:icon anchorPoint:anchorPoint zoomLevel:[zoomLevel intValue] textStyles:textStyles];
+  LabelStyle* labelStyle = [[LabelStyle alloc] init];
+  
+  labelStyle.icon = icon;
+  labelStyle.anchorPoint = anchorPoint;
+  labelStyle.zoomLevel = [zoomLevel intValue];
+  labelStyle.textStyles = textStyles;
+  
+  return labelStyle;
 }
 
 +(TextStyleProp*)convertTextStyle:(NSDictionary*)data {
@@ -147,7 +177,10 @@
     NSString* idStr = lineData[@"id"];
     NSArray* segData = lineData[@"segments"];
     NSArray<RouteLineSegment*>* segments = [self convertLineSegments:segData];
-    RouteLine* line = [[RouteLine alloc] initWithId:idStr segments:segments];
+    RouteLine* line = [[RouteLine alloc] init];
+    
+    [line setId:idStr];
+    line.segments = segments;
     [lines addObject:line];
   }
   
@@ -170,12 +203,14 @@
     
     NSArray<Coordinate*>* coordinates = [self convertCoordinates:coordinatesData];
     
-    RouteLineSegment* segment = [[RouteLineSegment alloc]
-                                 initWithCoordinates:coordinates
-                                 lineWidth:lineWidth
-                                 lineColor:lineColor
-                                 strokeWidth:strokeWidth
-                                 strokeColor:strokeColor];
+    RouteLineSegment* segment = [[RouteLineSegment alloc] init];
+    
+    segment.coordinates = coordinates;
+    segment.lineWidth = lineWidth;
+    segment.lineColor = lineColor;
+    segment.strokeWidth = strokeWidth;
+    segment.strokeColor = strokeColor;
+    
     [segments addObject:segment];
   }
   
@@ -193,7 +228,9 @@
     NSNumber* latitude = coordinateData[@"latitude"];
     NSNumber* longitude = coordinateData[@"longitude"];
     
-    Coordinate* coordinate = [[Coordinate alloc] initWithLatitude:latitude.doubleValue longitude:longitude.doubleValue];
+    Coordinate* coordinate = [[Coordinate alloc] init];
+    coordinate.latitude = latitude.doubleValue;
+    coordinate.longitude = longitude.doubleValue;
     [coordinates addObject:coordinate];
   }
   
