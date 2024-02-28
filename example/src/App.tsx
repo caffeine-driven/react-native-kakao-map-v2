@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
   Button,
   type NativeSyntheticEvent,
+  SafeAreaView,
   StyleSheet,
   Switch,
   Text,
@@ -34,7 +35,7 @@ export default function App() {
   const [form, setForm] = useState<Form>({
     latitude: '33.56535720825195',
     longitude: '126.55416870117188',
-    zoomLevel: '9',
+    zoomLevel: '7',
     rotate: '0.0',
     tilt: '0.0',
   });
@@ -42,7 +43,7 @@ export default function App() {
     centerPosition: {
       latitude: parseFloat(form.latitude),
       longitude: parseFloat(form.longitude),
-      zoomLevel: parseInt(form.zoomLevel),
+      zoomLevel: parseInt(form.zoomLevel, 10),
     },
     lodLabels: [],
     balloonLabels: [],
@@ -88,7 +89,7 @@ export default function App() {
 
   const removeLodLabel = () => {
     const curLabels = mapProps.lodLabels ?? [];
-    if (curLabels.length == 0) {
+    if (curLabels.length === 0) {
       return;
     }
     const removeIdx = Math.floor(Math.random() * curLabels.length);
@@ -122,7 +123,7 @@ export default function App() {
 
   const removeBalloonLabel = () => {
     const curLabels = mapProps.balloonLabels ?? [];
-    if (curLabels.length == 0) {
+    if (curLabels.length === 0) {
       return;
     }
     const removeIdx = Math.floor(Math.random() * curLabels.length);
@@ -159,7 +160,7 @@ export default function App() {
         ...mapProps.centerPosition,
         latitude: parseFloat(form.latitude),
         longitude: parseFloat(form.longitude),
-        zoomLevel: parseInt(form.zoomLevel),
+        zoomLevel: parseInt(form.zoomLevel, 10),
       },
       rotate: form.rotate ? parseFloat(form.rotate) : undefined,
       tilt: form.tilt ? parseFloat(form.tilt) : undefined,
@@ -227,15 +228,15 @@ export default function App() {
         onBalloonLabelSelect={updateCurrentBalloonLabel}
         onLodLabelSelect={(e) => {
           (mapProps.lodLabels ?? []).forEach((it) => {
-            if (it.id == e.nativeEvent.labelId) {
+            if (it.id === e.nativeEvent.labelId) {
               console.log(it, e.nativeEvent.layerId);
             }
           });
           console.log(e.nativeEvent);
         }}
       />
-      <View style={styles.overlay}>
-        <View style={styles.div}>
+      <SafeAreaView style={styles.overlay} pointerEvents="box-none">
+        <View style={styles.div} pointerEvents="box-none">
           <TextInput
             style={styles.texts}
             value={`${form?.latitude}`}
@@ -247,7 +248,7 @@ export default function App() {
             onChangeText={updateForm('longitude')}
           />
         </View>
-        <View style={styles.div}>
+        <View style={styles.div} pointerEvents="box-none">
           <TextInput
             style={styles.texts}
             value={`${form?.zoomLevel}`}
@@ -265,19 +266,19 @@ export default function App() {
           />
           <Button title="apply" onPress={updateProps} />
         </View>
-        <View style={styles.div}>
+        <View style={styles.div} pointerEvents="box-none">
           <Button title="add balloon marker" onPress={addBalloonMarker} />
           <Button title="remove balloon marker" onPress={removeBalloonLabel} />
         </View>
-        <View style={styles.div}>
+        <View style={styles.div} pointerEvents="box-none">
           <Button title="add lod marker" onPress={addLodLabels} />
           <Button title="remove lod marker" onPress={removeLodLabel} />
         </View>
-        <View style={styles.div}>
+        <View style={styles.div} pointerEvents="box-none">
           <Button title="rotation cw" onPress={rotateTest(true)} />
           <Button title="rotation acw" onPress={rotateTest(false)} />
         </View>
-        <View style={styles.div}>
+        <View style={styles.div} pointerEvents="box-none">
           <Text>current loc toggle</Text>
           <Switch
             trackColor={{ false: '#767577', true: '#81b0ff' }}
@@ -301,7 +302,7 @@ export default function App() {
             value={mapProps.currentLocationMarkerOption?.rotateMap ?? false}
           />
         </View>
-        <View style={styles.div}>
+        <View style={styles.div} pointerEvents="box-none">
           <Text>draw lines</Text>
           <Switch
             trackColor={{ false: '#767577', true: '#81b0ff' }}
@@ -315,7 +316,7 @@ export default function App() {
             value={mapProps.routeLines != null}
           />
         </View>
-      </View>
+      </SafeAreaView>
     </View>
   );
 }
