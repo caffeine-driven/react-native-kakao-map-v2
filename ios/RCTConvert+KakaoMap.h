@@ -5,13 +5,13 @@
 //  Created by caffeine.driven on 2/19/24.
 //
 #import <React/RCTConvert.h>
-#import "camera/CenterPosition.h"
-#import "common/Coordinate.h"
+#import "CenterPosition.h"
+#import "Coordinate.h"
 
-#import "label/lodlabel/LodLabel.h"
-#import "label/location/CurrentLocationMarkerOption.h"
-#import "label/balloon/BalloonLabel.h"
-#import "line/RouteLine.h"
+#import "LodLabel.h"
+#import "CurrentLocationMarkerOption.h"
+#import "BalloonLabel.h"
+#import "RouteLine.h"
 
 @interface RCTConvert (KakaoMapV2ViewManager)
 

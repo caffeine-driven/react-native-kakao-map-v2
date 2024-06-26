@@ -176,6 +176,7 @@ class KakaoMapV2View : UIView, MapControllerDelegate, KakaoMapEventDelegate {
     if controller?.addView(mapviewInfo) == Result.OK {
       kakaoMap = controller?.getView("mapview") as? KakaoMap
       kakaoMap?.eventDelegate = self
+      kakaoMap?.viewRect = CGRect(x: 0.0, y: 0.0, width: self.frame.width, height: self.frame.height)
     }
   }
   
@@ -185,7 +186,7 @@ class KakaoMapV2View : UIView, MapControllerDelegate, KakaoMapEventDelegate {
   }
   
   func cameraDidStopped(kakaoMap: KakaoMapsSDK.KakaoMap, by: MoveBy){
-    let pos = kakaoMap.getPosition(CGPoint(x:0.5, y:0.5))
+    let pos = kakaoMap.getPosition(CGPoint(x:kakaoMap.viewRect.width*0.5, y:kakaoMap.viewRect.height*0.5))
     cameraManager.onCameraMoved(
       position: pos, zoomLevel: kakaoMap.zoomLevel, rotate: kakaoMap.rotationAngle, tilt: kakaoMap.tiltAngle, moveBy: by
     )

@@ -35,15 +35,13 @@ export interface KakaoMapV2Props {
   routeLines?: RouteLine[];
   showCurrentLocationMarker?: boolean;
   currentLocationMarkerOption?: CurrentLocationMarkerOption;
-  onCameraChange?: (
-    e: NativeSyntheticEvent<CameraChangeEvent>
-  ) => void | undefined;
+  onCameraChange?: (e: NativeSyntheticEvent<CameraChangeEvent>) => void;
   onBalloonLabelSelect?: (
     e: NativeSyntheticEvent<BalloonLabelSelectEvent>
-  ) => void | undefined;
+  ) => void;
   onLodLabelSelect?: (
     e: NativeSyntheticEvent<LodLabelSelectEventEvent>
-  ) => void | undefined;
+  ) => void;
 }
 interface KakaoMapV2ViewProps extends KakaoMapV2Props {
   style: ViewStyle;

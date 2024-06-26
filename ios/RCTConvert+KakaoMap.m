@@ -44,11 +44,8 @@
   
   CurrentLocationMarkerOption* option = [[CurrentLocationMarkerOption alloc] init];
 
-  option.latitude = lat.doubleValue;
-  option.longitude = lng.doubleValue;
   option.markerImage = markerImage;
   
-  option.angle = angle;
   option.rotateMap = rotateMap;
   option.offsetX = offsetX;
   option.offsetY = offsetY;

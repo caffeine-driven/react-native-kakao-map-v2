@@ -15,9 +15,9 @@ import {
   KakaoMapV2View,
 } from 'react-native-kakao-map-v2';
 import { useState } from 'react';
-import {
-  type BalloonLabelSelectEvent,
-  type CameraChangeEvent,
+import type {
+  BalloonLabelSelectEvent,
+  CameraChangeEvent,
 } from '../../src/event';
 import type { CurrentLocationMarkerOption } from '../../src/labels';
 import { lines } from './loadLines';
@@ -35,7 +35,7 @@ export default function App() {
   const [form, setForm] = useState<Form>({
     latitude: '33.56535720825195',
     longitude: '126.55416870117188',
-    zoomLevel: '7',
+    zoomLevel: '9',
     rotate: '0.0',
     tilt: '0.0',
   });
@@ -49,8 +49,6 @@ export default function App() {
     balloonLabels: [],
     showCurrentLocationMarker: false,
     currentLocationMarkerOption: {
-      latitude: 33.56535720825195,
-      longitude: 126.55416870117188,
       markerImage: 'current_location_marker',
       offsetX: 0.5,
       offsetY: 0.7,
@@ -169,20 +167,17 @@ export default function App() {
     setMapProps(newProps);
   };
 
-  const rotateTest = (direction: boolean) => () => {
-    let angle = 0;
+  const rotateTest = (_direction: boolean) => () => {
+    // let angle = 0;
 
     const handler = setInterval(() => {
       let prevOption = mapProps.currentLocationMarkerOption;
       const currentLocationMarkerOption: CurrentLocationMarkerOption = {
         ...prevOption,
-        angle,
         markerImage: prevOption?.markerImage!!,
-        latitude: prevOption?.latitude!!,
-        longitude: prevOption?.longitude!!,
       };
       setMapProps({ ...mapProps, currentLocationMarkerOption });
-      angle += direction ? 90 : -90;
+      // angle += direction ? 90 : -90;
     }, 1000);
     setTimeout(() => {
       clearInterval(handler);
@@ -193,8 +188,6 @@ export default function App() {
     const currentLocationMarkerOption: CurrentLocationMarkerOption = {
       ...prevOption,
       markerImage: prevOption?.markerImage!!,
-      latitude: prevOption?.latitude!!,
-      longitude: prevOption?.longitude!!,
       rotateMap: enable,
     };
     setMapProps({ ...mapProps, currentLocationMarkerOption });
@@ -224,7 +217,9 @@ export default function App() {
       <KakaoMapV2View
         style={styles.box}
         {...mapProps}
+        // @ts-ignore: Unreachable code error
         onCameraChange={updateFromView}
+        // @ts-ignore: Unreachable code error
         onBalloonLabelSelect={updateCurrentBalloonLabel}
         onLodLabelSelect={(e) => {
           (mapProps.lodLabels ?? []).forEach((it) => {

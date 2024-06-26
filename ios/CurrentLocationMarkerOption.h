@@ -10,10 +10,7 @@
 // CurrentLocationMarkerOption
 @interface CurrentLocationMarkerOption : NSObject
 
-@property (nonatomic, assign) double latitude;
-@property (nonatomic, assign) double longitude;
 @property (nonatomic, strong) NSString *markerImage;
-@property (nonatomic, strong, nullable) NSNumber *angle;
 @property (nonatomic, strong, nullable) NSNumber *rotateMap;
 @property (nonatomic, strong, nullable) NSNumber *offsetX;
 @property (nonatomic, strong, nullable) NSNumber *offsetY;

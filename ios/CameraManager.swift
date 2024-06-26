@@ -15,10 +15,11 @@ class CameraManager {
   var rotate: Double = 0.0
   var tilt: Double = 0.0
   var onCameraChange: RCTDirectEventBlock? = nil
-  let cameraAnimation = CameraAnimationOptions.init(autoElevation: true, consecutive: true, durationInMillis: 300)
+  let cameraAnimation = CameraAnimationOptions.init(autoElevation: true, consecutive: false, durationInMillis: 300)
   let cameraWithoutAnimation = CameraAnimationOptions.init(autoElevation: false, consecutive: false, durationInMillis: 5)
   
   func onCameraMoved(position: MapPoint, zoomLevel: Int, rotate: Double, tilt: Double, moveBy: MoveBy) {
+    print(moveBy.rawValue)
     self.onCameraChange?([
       "cameraPosition": [
         "centerPosition":[
@@ -36,7 +37,9 @@ class CameraManager {
   }
   
   func updateCameraCenter(kakaoMap: KakaoMap) {
+    print("shouldUpdateCenter")
     if(shouldUpdateCenter(kakaoMap: kakaoMap)) {
+      print("updateCameraCenter")
       let cameraUpdate = CameraUpdate.make(
         target: MapPoint(longitude: self.longitude, latitude: self.latitude),
         zoomLevel: self.zoomLevel, mapView: kakaoMap
@@ -46,7 +49,7 @@ class CameraManager {
   }
   
   private func shouldUpdateCenter(kakaoMap: KakaoMap) -> Bool{
-    let position = kakaoMap.getPosition(CGPoint(x:0.5, y:0.5))
+    let position = kakaoMap.getPosition(CGPoint(x:kakaoMap.viewRect.width*0.5, y:kakaoMap.viewRect.height*0.5))
     return position.wgsCoord.latitude != self.latitude
     || position.wgsCoord.longitude != self.longitude
     || kakaoMap.zoomLevel != zoomLevel

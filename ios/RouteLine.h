@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "../common/Coordinate.h"
+#import "Coordinate.h"
 // RouteLineSegment
 @interface RouteLineSegment : NSObject
 

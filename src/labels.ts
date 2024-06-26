@@ -59,9 +59,8 @@ export interface BalloonLabels extends LatLng {
   inactiveIcon: string;
 }
 
-export interface CurrentLocationMarkerOption extends LatLng {
+export interface CurrentLocationMarkerOption {
   markerImage: string;
-  angle?: number;
   rotateMap?: boolean;
   offsetX?: number;
   offsetY?: number;

@@ -77,6 +77,7 @@ private func createLabelOption(id: String, balloonLabel: BalloonLabel, kakaoMap:
   manager.addPoiStyle(poiStyle)
   let poiOption = PoiOptions(styleID: id, poiID: balloonLabel.id)
   poiOption.rank = 0
+  poiOption.transformType = .absoluteRotation
   poiOption.clickable = true
   return poiOption
 }
