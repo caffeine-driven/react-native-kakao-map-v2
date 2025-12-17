@@ -28,7 +28,7 @@ class RouteLineManager {
     }
     styleSet = RouteLineStylesSet.from(mutableListOf())
     for (idx in (0 until lineData.size())) {
-      val line = lineData.getMap(idx)
+      val line = lineData.getMap(idx)!!
       val id = line.getString("id") ?: continue
       val styleSegmentPair = convertSegments(line.getArray("segments"))
       styleSegmentPair.forEach { styleSet?.styles?.add(RouteLineStyles.from(it.first)) }
@@ -45,7 +45,7 @@ class RouteLineManager {
     return (0 until segmentData.size())
       .map { segmentData.getMap(it) }
       .map {
-        val coordinates = convertLatLng(it.getArray("coordinates"))
+        val coordinates = convertLatLng(it!!.getArray("coordinates"))
         val lineWidth = if(it.hasKey("lineWidth")) it.getDouble("lineWidth") else 16.0
         val lineColor = it.getString("lineColor") ?: "#F0F0F0"
         val strokeWidth = if(it.hasKey("strokeWidth")) it.getDouble("strokeWidth") else 0.0
@@ -66,7 +66,7 @@ class RouteLineManager {
     return (0 until coordinates.size())
       .map { coordinates.getMap(it) }
       .map {
-        LatLng.from(it.getDouble("latitude"), it.getDouble("longitude"))
+        LatLng.from(it!!.getDouble("latitude"), it.getDouble("longitude"))
       }.toTypedArray()
   }
 }

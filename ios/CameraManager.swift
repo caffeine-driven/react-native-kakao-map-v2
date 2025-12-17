@@ -7,6 +7,7 @@
 
 import Foundation
 import KakaoMapsSDK
+import react_native_kakao_map_v2
 
 class CameraManager {
   var latitude: Double = 37.402005
@@ -17,7 +18,7 @@ class CameraManager {
   var onCameraChange: RCTDirectEventBlock? = nil
   let cameraAnimation = CameraAnimationOptions.init(autoElevation: true, consecutive: false, durationInMillis: 300)
   let cameraWithoutAnimation = CameraAnimationOptions.init(autoElevation: false, consecutive: false, durationInMillis: 5)
-  
+
   func onCameraMoved(position: MapPoint, zoomLevel: Int, rotate: Double, tilt: Double, moveBy: MoveBy) {
     print(moveBy.rawValue)
     self.onCameraChange?([
@@ -33,9 +34,9 @@ class CameraManager {
       "gestureType": self.moveByReason(moveBy: moveBy),
     ])
 
-    
+
   }
-  
+
   func updateCameraCenter(kakaoMap: KakaoMap) {
     print("shouldUpdateCenter")
     if(shouldUpdateCenter(kakaoMap: kakaoMap)) {
@@ -47,38 +48,38 @@ class CameraManager {
       kakaoMap.animateCamera(cameraUpdate: cameraUpdate, options: self.cameraAnimation)
     }
   }
-  
+
   private func shouldUpdateCenter(kakaoMap: KakaoMap) -> Bool{
     let position = kakaoMap.getPosition(CGPoint(x:kakaoMap.viewRect.width*0.5, y:kakaoMap.viewRect.height*0.5))
     return position.wgsCoord.latitude != self.latitude
     || position.wgsCoord.longitude != self.longitude
     || kakaoMap.zoomLevel != zoomLevel
   }
-  
+
   func updateRotate(kakaoMap: KakaoMap) {
     if(shouldUpdateRotate(kakaoMap: kakaoMap)) {
-      
+
       let cameraUpdate = CameraUpdate.make(rotation: self.rotate.degreesToRadians, tilt: kakaoMap.tiltAngle, mapView: kakaoMap)
       kakaoMap.moveCamera(cameraUpdate)
     }
-    
+
   }
   private func shouldUpdateRotate(kakaoMap: KakaoMap) -> Bool {
     return kakaoMap.rotationAngle != self.rotate
   }
-  
+
   func updateTilt(kakaoMap: KakaoMap) {
     if(shouldUpdateTilt(kakaoMap: kakaoMap)) {
       let cameraUpdate = CameraUpdate.make(rotation: kakaoMap.rotationAngle, tilt: self.tilt.degreesToRadians, mapView: kakaoMap)
       kakaoMap.moveCamera(cameraUpdate)
     }
-    
+
   }
   private func shouldUpdateTilt(kakaoMap: KakaoMap) -> Bool {
     return kakaoMap.rotationAngle != self.rotate
   }
   private func moveByReason(moveBy: MoveBy) -> String {
-    
+
     switch moveBy {
     case MoveBy.doubleTapZoomIn:
       return "OneFingerDoubleTap"
@@ -102,7 +103,7 @@ class CameraManager {
       return "Unknown"
     }
   }
-  
+
 }
 
 extension FloatingPoint {

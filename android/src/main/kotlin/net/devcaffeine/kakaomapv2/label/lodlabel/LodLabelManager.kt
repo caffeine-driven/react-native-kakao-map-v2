@@ -29,7 +29,7 @@ class LodLabelManager(
     labelOptions = (0 until (lodLabels.size()))
       .map { labelIdx -> lodLabels.getMap(labelIdx) }
       .map { labelMap ->
-        val labelId = labelMap.getString("id")
+        val labelId = labelMap!!.getString("id")
         val clickable = labelMap.getBoolean("clickable")
         val latitude = labelMap.getDouble("latitude")
         val longitude = labelMap.getDouble("longitude")
@@ -85,12 +85,13 @@ class LodLabelManager(
       }.toTypedArray()
   }
 
-  override fun onLodLabelClicked(kakaoMap: KakaoMap?, layer: LodLabelLayer?, label: LodLabel?) {
+  override fun onLodLabelClicked(kakaoMap: KakaoMap?, layer: LodLabelLayer?, label: LodLabel?): Boolean {
     if (layer?.layerId == null || label?.labelId == null) {
-      return
+      return false
     }
     if(kakaoMap?.labelManager?.lodLayer?.layerId == layer.layerId) {
       nativeEventEmitter.emitEvent(LodLabelSelectEventParam(layer.layerId, label.labelId))
     }
+    return true
   }
 }

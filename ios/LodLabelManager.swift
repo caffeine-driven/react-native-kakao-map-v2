@@ -7,20 +7,21 @@
 
 import Foundation
 import KakaoMapsSDK
+import react_native_kakao_map_v2
 
 class LodLabelManager {
   let lodLabelLayerOption: LodLabelLayerOptions
   let onLodLabelSelected: (String?, String?) -> Void
   var labelOptions: Array<PoiOptions>
   var positions: Array<MapPoint>
-  
+
   init(onLodLabelSelected: @escaping (String?, String?) -> Void, kakaoMap: KakaoMap) {
     self.onLodLabelSelected = onLodLabelSelected
     self.lodLabelLayerOption = LodLabelLayerOptions(layerID: "lodLabelLayer", competitionType: .sameLower, competitionUnit: .symbolFirst, orderType: .rank, zOrder: 10000, radius: 1000.0)
     self.labelOptions = []
     self.positions = []
   }
-  
+
   func render(kakaoMap: KakaoMap) {
     let _ = kakaoMap.getLabelManager().addLodLabelLayer(option: self.lodLabelLayerOption)
     let layer = kakaoMap.getLabelManager().getLodLabelLayer(layerID: self.lodLabelLayerOption.layerID)
@@ -37,7 +38,7 @@ class LodLabelManager {
   func handleLodPoiTouch(_ param: PoiInteractionEventParam) {
     self.onLodLabelSelected(param.poiItem.layerID, param.poiItem.itemID)
   }
-  
+
   func loadLabels(lodLabels: Array<LodLabel>, kakaoMap: KakaoMap) {
     labelOptions = []
     positions = []
@@ -54,17 +55,17 @@ class LodLabelManager {
       positions.append(MapPoint(longitude: lodLabel.longitude, latitude: lodLabel.latitude))
     }
   }
-  
+
   func convertLabelStyle(labelStyle: LabelStyle)->PerLevelPoiStyle {
     let iconStyle = PoiIconStyle(symbol: UIImage(named: labelStyle.icon), anchorPoint: CGPoint(x: labelStyle.anchorPoint.x, y: labelStyle.anchorPoint.y))
     let textStyle = self.convertTextStyle(textStyleProps: labelStyle.textStyles)
     return PerLevelPoiStyle(iconStyle: iconStyle, textStyle: textStyle, padding: 0.0, level: Int(labelStyle.zoomLevel))
   }
-  
+
   func convertTextStyle(textStyleProps: Array<TextStyleProp>) ->PoiTextStyle {
     let lineStyles = textStyleProps.map({
       (styleProp: TextStyleProp)->PoiTextLineStyle in
-      
+
       var strokeThickness: UInt = 2
       if styleProp.strokeThickness != nil { strokeThickness = styleProp.strokeThickness!.uintValue }
       var strokeColor: UIColor = UIColor.white
@@ -75,7 +76,7 @@ class LodLabelManager {
       if styleProp.lineSpace != nil { lineSpace = styleProp.lineSpace!.floatValue }
       var aspectRatio: Float = 1.0
       if styleProp.aspectRatio != nil { aspectRatio = styleProp.aspectRatio!.floatValue }
-      
+
       return PoiTextLineStyle(textStyle: TextStyle(
         fontSize: styleProp.fontSize.uintValue,
         fontColor: hexStringToUIColor(hexColor: styleProp.fontColor ?? "#000000"),

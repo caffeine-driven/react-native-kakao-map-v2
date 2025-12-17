@@ -26,10 +26,12 @@ class KakaoMapCoordinator: NSObject, MapControllerDelegate, KakaoMapEventDelegat
     
     let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview", viewInfoName: "map", defaultPosition: defaultPosition, defaultLevel: 9)
     
-    if controller?.addView(mapviewInfo) == Result.OK {
-      kakaoMap = controller?.getView("mapview") as? KakaoMap
-      kakaoMap?.eventDelegate = self
-    }
+    controller?.addView(mapviewInfo)
+  }
+  
+  func addViewSucceeded(_ viewName: String, viewInfoName: String) {
+    kakaoMap = controller?.getView("mapview") as? KakaoMap
+    kakaoMap?.eventDelegate = self
   }
   
   func containerDidResized(_ size: CGSize) {

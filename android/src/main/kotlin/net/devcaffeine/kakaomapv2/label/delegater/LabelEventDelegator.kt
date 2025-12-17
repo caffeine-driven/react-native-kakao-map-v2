@@ -9,11 +9,11 @@ class LabelEventDelegator(vararg adapter: LabelEventAdapter) : KakaoMap.OnLabelC
   init {
       adapters = adapter.toList()
   }
-  override fun onLabelClicked(kakaoMap: KakaoMap?, layer: LabelLayer?, label: Label?) {
+  override fun onLabelClicked(kakaoMap: KakaoMap?, layer: LabelLayer?, label: Label?): Boolean {
     val layerId = layer?.layerId
     val labelId = label?.labelId
     if (labelId == null || layerId == null){
-      return
+      return false
     }
     for (adapter in adapters) {
       val triggered = adapter.onLabelClick(layerId, labelId)
@@ -21,5 +21,6 @@ class LabelEventDelegator(vararg adapter: LabelEventAdapter) : KakaoMap.OnLabelC
         break
       }
     }
+    return true
   }
 }

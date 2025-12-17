@@ -20,7 +20,7 @@ class BalloonMarkerManager(
     balloonMarkers = (0 until (balloonLabels.size()))
       .map { balloonLabels.getMap(it) }
       .map { map ->
-        val id = map.getString("id")!!
+        val id = map!!.getString("id")!!
         val title = map.getString("title")!!
         val latitude = map.getDouble("latitude")
         val longitude = map.getDouble("longitude")

@@ -3,6 +3,7 @@ package net.devcaffeine.kakaomapv2
 import android.graphics.PointF
 import android.util.Log
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.uimanager.SimpleViewManager
@@ -172,6 +173,7 @@ class KakaoMapV2ViewManager(
   }
 
   override fun <T : Event<T>> dispatchEvent(event: T) {
+    val context = context as ReactContext
     val dispatcher = UIManagerHelper.getEventDispatcherForReactTag(context, mapView?.id ?: 0)!!
     dispatcher.dispatchEvent(event)
   }

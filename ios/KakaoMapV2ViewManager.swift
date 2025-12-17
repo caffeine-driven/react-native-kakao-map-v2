@@ -123,7 +123,10 @@ class KakaoMapV2View : UIView, MapControllerDelegate, KakaoMapEventDelegate {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
+    let appKey: String? = Bundle.main.object(forInfoDictionaryKey: "KAKAO_APP_KEY") as? String
+    SDKInitializer.InitSDK(appKey: appKey ?? "")
     self.frame = frame;
+    
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -134,30 +137,20 @@ class KakaoMapV2View : UIView, MapControllerDelegate, KakaoMapEventDelegate {
     let view: KMViewContainer = KMViewContainer(frame: frame)
     
     addSubview(view)
-    controller = KMController(viewContainer: view)
+  }
+  override func didAddSubview(_ subview: UIView) {
+    controller = KMController(viewContainer: subview as! KMViewContainer)
     controller?.delegate = self
-    controller?.initEngine()
-    controller?.startEngine()
-    controller?.startRendering()
+    controller?.prepareEngine()
     
-    let kakaoMap = controller?.getView("mapview") as? KakaoMap
-    
-    if kakaoMap != nil {
-      self.balloonLabelManager = BalloonLabelManager(
-        onBalloonLabelSelected: self.balloonLabelSelectionHandler, kakaoMap: kakaoMap!
-      )
-      self.balloonLabelManager?.loadLabels(balloonLabels: self.balloonLabels ?? [], kakaoMap: kakaoMap!)
-      self.balloonLabelManager?.render(kakaoMap: kakaoMap!)
-      self.lodLabelMananger = LodLabelManager(onLodLabelSelected: self.lodLabelSelectionHandler, kakaoMap: kakaoMap!)
-      self.lodLabelMananger?.loadLabels(lodLabels: self.lodLabels, kakaoMap: kakaoMap!)
-      self.lodLabelMananger?.render(kakaoMap: kakaoMap!)
-      self.currentLocationMarkerManager = CurrentLocationMarkerManager()
-      self.currentLocationMarkerManager?.loadOption(option: self.currentLocationMarkerOption)
-      self.currentLocationMarkerManager?.updateVisibility(kakaoMap: kakaoMap!)
-      self.routeLineManager = RouteLineManager()
-      self.routeLineManager?.loadLines(routeLines: self.routeLines, kakaoMap: kakaoMap!)
+    if controller?.isEngineActive == false {
+      controller?.activateEngine()
     }
     
+    let defaultPosition: MapPoint = MapPoint(longitude:  self.centerPosition.longitude, latitude: self.centerPosition.latitude)
+    
+    let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview", viewInfoName: "map", defaultPosition: defaultPosition, defaultLevel: Int(self.centerPosition.zoomLevel))
+    controller?.addView(mapviewInfo)
   }
   func balloonLabelSelectionHandler(labelId: String?) {
     self.onBalloonLabelSelect?(["labelId":labelId ?? nil])
@@ -169,16 +162,33 @@ class KakaoMapV2View : UIView, MapControllerDelegate, KakaoMapEventDelegate {
     ])
   }
   func addViews() {
-    let defaultPosition: MapPoint = MapPoint(longitude:  self.centerPosition.longitude, latitude: self.centerPosition.latitude)
     
-    let mapviewInfo: MapviewInfo = MapviewInfo(viewName: "mapview", viewInfoName: "map", defaultPosition: defaultPosition, defaultLevel: Int(self.centerPosition.zoomLevel))
-    
-    if controller?.addView(mapviewInfo) == Result.OK {
-      kakaoMap = controller?.getView("mapview") as? KakaoMap
-      kakaoMap?.eventDelegate = self
-      kakaoMap?.viewRect = CGRect(x: 0.0, y: 0.0, width: self.frame.width, height: self.frame.height)
-    }
   }
+
+  func addViewSucceeded(_ viewName: String, viewInfoName: String) {
+    kakaoMap = controller?.getView("mapview") as? KakaoMap
+    kakaoMap?.eventDelegate = self
+    kakaoMap?.viewRect = CGRect(x: 0.0, y: 0.0, width: self.frame.width, height: self.frame.height)
+    
+    self.balloonLabelManager = BalloonLabelManager(
+      onBalloonLabelSelected: self.balloonLabelSelectionHandler, kakaoMap: kakaoMap!
+    )
+    self.balloonLabelManager?.loadLabels(balloonLabels: self.balloonLabels ?? [], kakaoMap: kakaoMap!)
+    self.balloonLabelManager?.render(kakaoMap: kakaoMap!)
+    self.lodLabelMananger = LodLabelManager(onLodLabelSelected: self.lodLabelSelectionHandler, kakaoMap: kakaoMap!)
+    self.lodLabelMananger?.loadLabels(lodLabels: self.lodLabels, kakaoMap: kakaoMap!)
+    self.lodLabelMananger?.render(kakaoMap: kakaoMap!)
+    self.currentLocationMarkerManager = CurrentLocationMarkerManager()
+    self.currentLocationMarkerManager?.loadOption(option: self.currentLocationMarkerOption)
+    self.currentLocationMarkerManager?.updateVisibility(kakaoMap: kakaoMap!)
+    self.routeLineManager = RouteLineManager()
+    self.routeLineManager?.loadLines(routeLines: self.routeLines, kakaoMap: kakaoMap!)
+  }
+  
+  func addViewFailed(_ viewName: String, viewInfoName: String) {
+    print("addViewFailed Failed")
+  }
+
   
   func containerDidResized(_ size: CGSize) {
     let mapView: KakaoMap? = controller?.getView("mapview") as? KakaoMap
@@ -193,6 +203,10 @@ class KakaoMapV2View : UIView, MapControllerDelegate, KakaoMapEventDelegate {
   }
   func terrainDidTapped(kakaoMap: KakaoMapsSDK.KakaoMap, position: KakaoMapsSDK.MapPoint) {
     self.balloonLabelSelectionHandler(labelId: nil)
+  }
+  func authenticationFailed(_ errorCode: Int, desc: String) {
+    print("error code: \(errorCode)")
+    print("desc: \(desc)")
   }
 
 }
